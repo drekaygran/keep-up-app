@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: DynamoDB resource stack creation using Amplify CLI
+Parameters:
+  partitionKeyName:
+    Type: String
+  partitionKeyType:
+    Type: String
+  env:
+    Type: String
+  sortKeyName:
+    Type: String
+  sortKeyType:
+    Type: String
+  tableName:
+    Type: String
+Conditions:
+  ShouldNotCreateEnvResources: !Equals
+    - !Ref env
+    - NONE
+Resources:
+  DynamoDBTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: username
+          AttributeType: S
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+        - AttributeName: username
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: '5'
+        WriteCapacityUnits: '5'
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+      TableName: !If
+        - ShouldNotCreateEnvResources
+        - !Ref tableName
+        - !Join
+          - ''
+          - - !Ref tableName
+            - '-'
+            - !Ref env
+Outputs:
+  Name:
+    Value: !Ref DynamoDBTable
+  Arn:
+    Value: !GetAtt
+      - DynamoDBTable
+      - Arn
+  StreamArn:
+    Value: !GetAtt
+      - DynamoDBTable
+      - StreamArn
+  PartitionKeyName:
+    Value: !Ref partitionKeyName
+  PartitionKeyType:
+    Value: !Ref partitionKeyType
+  SortKeyName:
+    Value: !Ref sortKeyName
+  SortKeyType:
+    Value: !Ref sortKeyType
+  Region:
+    Value: !Ref 'AWS::Region'
