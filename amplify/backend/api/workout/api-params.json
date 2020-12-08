@@ -1,0 +1,35 @@
+{
+    "paths": [
+        {
+            "name": "/workouts",
+            "lambdaFunction": "keepupappb79be2f0",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/workouts"
+        }
+    ],
+    "resourceName": "workout",
+    "apiName": "workout",
+    "functionArns": [
+        {
+            "lambdaFunction": "keepupappb79be2f0"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-keepupapp-dev-85710-authRole",
+        "unAuthRoleName": "amplify-keepupapp-dev-85710-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "keepupappb79be2f0",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
